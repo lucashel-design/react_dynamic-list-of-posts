@@ -7,6 +7,7 @@ import { CommentsList } from './CommentsList';
 import { client } from '../utils/fetchClient';
 import { ApiError } from '../types/ApiError';
 import { isApiError } from '../utils/isApiError';
+import { postShape } from '../types/propShapes';
 
 interface PostDetailsProps {
   activePost: Post;
@@ -117,4 +118,8 @@ export const PostDetails: React.FC<PostDetailsProps> = ({ activePost }) => {
       {isFormOpen && <NewCommentForm onNewComment={handleNewComment} />}
     </div>
   );
+};
+
+PostDetails.propTypes = {
+  activePost: postShape.isRequired,
 };

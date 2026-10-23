@@ -1,6 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Post } from '../types/Post';
 import { PostItem } from './PostItem';
+import { postShape } from '../types/propShapes';
 
 interface PostsListProps {
   posts: Post[] | null;
@@ -42,4 +44,10 @@ export const PostsList: React.FC<PostsListProps> = ({
       </table>
     </div>
   );
+};
+
+PostsList.propTypes = {
+  posts: PropTypes.arrayOf(postShape.isRequired).isRequired,
+  selectedPostId: PropTypes.number,
+  onSelectPost: PropTypes.func.isRequired,
 };

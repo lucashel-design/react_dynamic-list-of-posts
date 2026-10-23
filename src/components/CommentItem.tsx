@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Comment } from '../types/Comment';
+import { commentShape } from '../types/propShapes';
 
 interface CommentItemProps {
   comment: Comment;
@@ -32,4 +34,9 @@ export const CommentItem: React.FC<CommentItemProps> = ({
       </div>
     </article>
   );
+};
+
+CommentItem.propTypes = {
+  comment: commentShape.isRequired,
+  onDeleteComment: PropTypes.func.isRequired,
 };

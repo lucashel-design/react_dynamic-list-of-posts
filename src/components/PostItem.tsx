@@ -1,6 +1,8 @@
 import React from 'react';
-import { Post } from '../types/Post';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { Post } from '../types/Post';
+import { postShape } from '../types/propShapes';
 
 interface PostItemProps {
   post: Post;
@@ -33,4 +35,10 @@ export const PostItem: React.FC<PostItemProps> = ({
       </td>
     </>
   );
+};
+
+PostItem.propTypes = {
+  post: postShape.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelectPost: PropTypes.func.isRequired,
 };

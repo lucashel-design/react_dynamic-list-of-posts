@@ -1,5 +1,6 @@
-import classNames from 'classnames';
 import React, { useState } from 'react';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { CommentData } from '../types/Comment';
 
 interface NewCommentFormProps {
@@ -192,4 +193,8 @@ export const NewCommentForm: React.FC<NewCommentFormProps> = ({
       </div>
     </form>
   );
+};
+
+NewCommentForm.propTypes = {
+  onNewComment: PropTypes.func.isRequired,
 };

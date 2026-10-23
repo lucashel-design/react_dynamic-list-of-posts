@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { User } from '../types/User';
+import { userShape } from '../types/propShapes';
 
 interface UserSelectorProps {
   users: User[];
@@ -81,4 +83,10 @@ export const UserSelector: React.FC<UserSelectorProps> = ({
       </div>
     </div>
   );
+};
+
+UserSelector.propTypes = {
+  users: PropTypes.arrayOf(userShape.isRequired).isRequired,
+  activeUser: PropTypes.number,
+  onSelectUser: PropTypes.func.isRequired,
 };
