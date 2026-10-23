@@ -2,13 +2,13 @@ import React from 'react';
 import { Post } from '../types/Post';
 import { PostItem } from './PostItem';
 
-interface FilteredPosts {
+interface PostsListProps {
   posts: Post[] | null;
   onSelectPost: (id: number) => void;
   selectedPostId: number | null;
 }
 
-export const PostsList: React.FC<FilteredPosts> = ({
+export const PostsList: React.FC<PostsListProps> = ({
   posts,
   onSelectPost,
   selectedPostId,

@@ -70,53 +70,51 @@ export const PostDetails: React.FC<PostDetailsProps> = ({ activePost }) => {
 
   return (
     <div className="content" data-cy="PostDetails">
-      <div className="content" data-cy="PostDetails">
-        <div className="block">
-          <h2 data-cy="PostTitle">
-            #{activePost.id}: {activePost.title}
-          </h2>
+      <div className="block">
+        <h2 data-cy="PostTitle">
+          #{activePost.id}: {activePost.title}
+        </h2>
 
-          <p data-cy="PostBody">{activePost.body}</p>
-        </div>
-
-        <div className="block">
-          {isLoading && <Loader />}
-
-          {hasError && (
-            <div className="notification is-danger" data-cy="CommentsError">
-              Something went wrong
-            </div>
-          )}
-
-          {isLoaded && comments.length === 0 && (
-            <p className="title is-4" data-cy="NoCommentsMessage">
-              No comments yet
-            </p>
-          )}
-
-          {isLoaded && comments.length > 0 && (
-            <p className="title is-4">Comments:</p>
-          )}
-
-          <CommentsList
-            comments={comments}
-            onDeleteComment={handleDeleteComment}
-          />
-
-          {isLoaded && !isFormOpen && (
-            <button
-              data-cy="WriteCommentButton"
-              type="button"
-              className="button is-link"
-              onClick={() => setIsFormOpen(true)}
-            >
-              Write a comment
-            </button>
-          )}
-        </div>
-
-        {isFormOpen && <NewCommentForm onNewComment={handleNewComment} />}
+        <p data-cy="PostBody">{activePost.body}</p>
       </div>
+
+      <div className="block">
+        {isLoading && <Loader />}
+
+        {hasError && (
+          <div className="notification is-danger" data-cy="CommentsError">
+            Something went wrong
+          </div>
+        )}
+
+        {isLoaded && comments.length === 0 && (
+          <p className="title is-4" data-cy="NoCommentsMessage">
+            No comments yet
+          </p>
+        )}
+
+        {isLoaded && comments.length > 0 && (
+          <p className="title is-4">Comments:</p>
+        )}
+
+        <CommentsList
+          comments={comments}
+          onDeleteComment={handleDeleteComment}
+        />
+
+        {isLoaded && !isFormOpen && (
+          <button
+            data-cy="WriteCommentButton"
+            type="button"
+            className="button is-link"
+            onClick={() => setIsFormOpen(true)}
+          >
+            Write a comment
+          </button>
+        )}
+      </div>
+
+      {isFormOpen && <NewCommentForm onNewComment={handleNewComment} />}
     </div>
   );
 };

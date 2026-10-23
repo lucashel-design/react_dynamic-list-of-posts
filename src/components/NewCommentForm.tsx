@@ -21,7 +21,6 @@ export const NewCommentForm: React.FC<NewCommentFormProps> = ({
   ) {
     const { name, value } = event.target;
 
-    // Atualiza dinamicamente a propriedade baseada no 'name' do input
     setValues(currentValues => ({
       ...currentValues,
       [name]: value,

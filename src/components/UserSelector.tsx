@@ -1,32 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { User } from '../types/User';
 import classNames from 'classnames';
+import { User } from '../types/User';
 
-interface UserList {
+interface UserSelectorProps {
   users: User[];
   onSelectUser: (id: number) => void;
   activeUser: number | null;
 }
 
-export const UserSelector: React.FC<UserList> = ({
+export const UserSelector: React.FC<UserSelectorProps> = ({
   users,
   onSelectUser,
   activeUser,
 }) => {
-  const [triggerDrowpdown, setTriggerDrowpdown] = useState<boolean>(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setTriggerDrowpdown(false);
-    }
-  };
-
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
     document.addEventListener('click', handleClickOutside);
 
     return () => {
@@ -36,7 +36,7 @@ export const UserSelector: React.FC<UserList> = ({
 
   const handleClick = (id: number) => {
     onSelectUser(id);
-    setTriggerDrowpdown(false);
+    setIsDropdownOpen(false);
   };
 
   const selectedUser = users.find(user => user.id === activeUser);
@@ -45,7 +45,7 @@ export const UserSelector: React.FC<UserList> = ({
     <div
       ref={dropdownRef}
       data-cy="UserSelector"
-      className={classNames('dropdown', [triggerDrowpdown && 'is-active'])}
+      className={classNames('dropdown', { 'is-active': isDropdownOpen })}
     >
       <div className="dropdown-trigger">
         <button
@@ -53,13 +53,9 @@ export const UserSelector: React.FC<UserList> = ({
           className="button"
           aria-haspopup="true"
           aria-controls="dropdown-menu"
-          onClick={() => setTriggerDrowpdown(true)}
+          onClick={() => setIsDropdownOpen(current => !current)}
         >
-          <span>
-            {activeUser === null
-              ? 'Choose a user'
-              : selectedUser && selectedUser.name}
-          </span>
+          <span>{selectedUser ? selectedUser.name : 'Choose a user'}</span>
 
           <span className="icon is-small">
             <i className="fas fa-angle-down" aria-hidden="true" />
@@ -69,13 +65,12 @@ export const UserSelector: React.FC<UserList> = ({
 
       <div className="dropdown-menu" id="dropdown-menu" role="menu">
         <div className="dropdown-content">
-          {users?.map(user => (
+          {users.map(user => (
             <a
               href={`#user-${user.id}`}
-              className={classNames(
-                'dropdown-item',
-                activeUser === user.id && ['is-active'],
-              )}
+              className={classNames('dropdown-item', {
+                'is-active': activeUser === user.id,
+              })}
               key={user.id}
               onClick={() => handleClick(user.id)}
             >

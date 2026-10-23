@@ -12,28 +12,32 @@ import { Loader } from './components/Loader';
 import { Post } from './types/Post';
 import { User } from './types/User';
 import { client } from './utils/fetchClient';
+import { isApiError } from './utils/isApiError';
 
 export const App = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userList, setUserList] = useState<User[]>([]);
-  const [hasError, setHasError] = useState<boolean>(false);
   const [selectUser, setSelectUser] = useState<number | null>(null);
   const [postList, setPostList] = useState<Post[]>([]);
   const [selectPost, setSelectPost] = useState<number | null>(null);
   const selectedPost = postList.find(post => post.id === selectPost);
-  const isPostsLoaded = selectUser !== null && !isLoading && !hasError;
+  const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
+  const [hasPostsError, setHasPostsError] = useState<boolean>(false);
+
+  const isPostsLoaded =
+    selectUser !== null && !isPostsLoading && !hasPostsError;
 
   useEffect(() => {
     async function loadUsers() {
-      setHasError(false);
       try {
         const data = await client.get<User[]>('/users');
 
+        if (isApiError(data)) {
+          throw new Error(data.error);
+        }
+
         setUserList(data);
       } catch {
-        setHasError(true);
-      } finally {
-        setIsLoading(false);
+        alert('Load Users Unsuccessfull!');
       }
     }
 
@@ -41,22 +45,26 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    setHasError(false);
+    setHasPostsError(false);
     async function loadPosts() {
       if (!selectUser) {
         return;
       }
 
-      setIsLoading(true);
+      setIsPostsLoading(true);
 
       try {
         const data = await client.get<Post[]>(`/posts?userId=${selectUser}`);
 
+        if (isApiError(data)) {
+          throw new Error(data.error);
+        }
+
         setPostList(data);
       } catch {
-        setHasError(true);
+        setHasPostsError(true);
       } finally {
-        setIsLoading(false);
+        setIsPostsLoading(false);
       }
     }
 
@@ -86,9 +94,9 @@ export const App = () => {
                   <p data-cy="NoSelectedUser">No user selected</p>
                 )}
 
-                {isLoading && <Loader />}
+                {isPostsLoading && <Loader />}
 
-                {hasError && (
+                {hasPostsError && (
                   <div
                     className="notification is-danger"
                     data-cy="PostsLoadingError"
